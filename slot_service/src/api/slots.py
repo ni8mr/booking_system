@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 from uuid import UUID
 from pydantic import BaseModel
-from src.models.slot import get_db
+from src.models.slots import get_db
 from src.services.slot_service import SlotService
 from src.utils.auth import verify_jwt_token, User
 

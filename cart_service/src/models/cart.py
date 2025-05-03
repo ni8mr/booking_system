@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, Float, DateTime, create_engine
+from sqlalchemy import Column, ForeignKey, func, Integer, Float, DateTime, create_engine
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
@@ -9,19 +9,17 @@ Base = declarative_base()
 
 class Cart(Base):
     __tablename__ = "cart"
-    __table_args__ = {"schema": "cart"}
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     user_id = Column(UUID(as_uuid=True), nullable=False)
-    created_at = Column(DateTime, nullable=False, server_default="CURRENT_TIMESTAMP")
+    created_at = Column(DateTime, nullable=False, server_default=func.now())
     items = relationship("CartItem", back_populates="cart", cascade="all, delete-orphan")
 
 class CartItem(Base):
     __tablename__ = "cart_item"
-    __table_args__ = {"schema": "cart"}
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    cart_id = Column(UUID(as_uuid=True), ForeignKey("cart.cart.id"), nullable=False)
+    cart_id = Column(UUID(as_uuid=True), ForeignKey("cart.id"), nullable=False)
     service_id = Column(UUID(as_uuid=True), nullable=False)
     partner_id = Column(UUID(as_uuid=True), nullable=False)
     slot_id = Column(UUID(as_uuid=True), nullable=False)

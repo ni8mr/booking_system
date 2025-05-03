@@ -9,7 +9,6 @@ Base = declarative_base()
 
 class PartnerSlot(Base):
     __tablename__ = "partner_slot"
-    __table_args__ = {"schema": "slot"}
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     partner_id = Column(UUID(as_uuid=True), nullable=False)

@@ -7,8 +7,15 @@ from sqlalchemy.orm import Session
 from src.models.cart import Cart, CartItem, get_db
 from src.services.cart_service import CartService
 from src.utils.auth import verify_jwt_token, User
+import os
 
 app = FastAPI(title="Cart Service", version="1.0.0")
+
+JWT_PUBLIC_KEY = os.getenv("JWT_PUBLIC_KEY")
+if not JWT_PUBLIC_KEY:
+    raise ValueError("JWT_PUBLIC_KEY environment variable is not set")
+JWT_PUBLIC_KEY = JWT_PUBLIC_KEY.replace("\\n", "\n")  # Convert \n to newlines
+print("Loaded JWT_PUBLIC_KEY:", JWT_PUBLIC_KEY[:50] + "...")  # Debug
 
 oauth2_scheme = OAuth2AuthorizationCodeBearer(
     authorizationUrl="http://auth-service/authorize",

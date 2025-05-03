@@ -4,7 +4,7 @@ from typing import List
 from uuid import UUID
 from pydantic import BaseModel
 from src.models.catalog import get_db
-from src.services.catalog_service import CatalogService
+from src.services.catalog_services import CatalogService
 from src.utils.auth import verify_jwt_token, User
 
 router = APIRouter()

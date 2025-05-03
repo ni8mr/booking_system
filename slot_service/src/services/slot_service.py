@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from src.models.slot import PartnerSlot
+from src.models.slots import PartnerSlot
 from uuid import UUID, uuid4
 from fastapi import HTTPException
 from pydantic import BaseModel

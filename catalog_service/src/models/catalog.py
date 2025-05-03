@@ -9,7 +9,6 @@ Base = declarative_base()
 
 class Category(Base):
     __tablename__ = "category"
-    __table_args__ = {"schema": "catalog"}
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String, nullable=False)
@@ -17,21 +16,19 @@ class Category(Base):
 
 class Subcategory(Base):
     __tablename__ = "subcategory"
-    __table_args__ = {"schema": "catalog"}
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String, nullable=False)
-    category_id = Column(UUID(as_uuid=True), ForeignKey("catalog.category.id"), nullable=False)
+    category_id = Column(UUID(as_uuid=True), ForeignKey("category.id"), nullable=False)
     category = relationship("Category", back_populates="subcategories")
     services = relationship("Service", back_populates="subcategory", cascade="all, delete-orphan")
 
 class Service(Base):
     __tablename__ = "service"
-    __table_args__ = {"schema": "catalog"}
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String, nullable=False)
-    subcategory_id = Column(UUID(as_uuid=True), ForeignKey("catalog.subcategory.id"), nullable=False)
+    subcategory_id = Column(UUID(as_uuid=True), ForeignKey("subcategory.id"), nullable=False)
     price = Column(Float, nullable=False)
     duration = Column(Integer, nullable=False)
     subcategory = relationship("Subcategory", back_populates="services")
