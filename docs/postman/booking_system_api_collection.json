@@ -1,0 +1,199 @@
+{
+  "info": {
+    "name": "Booking System API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Cart Service",
+      "item": [
+        {
+          "name": "Create Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"user_id\": \"550e8400-e29b-41d4-a716-446655440010\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8001/carts",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8001",
+              "path": ["carts"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Checkout Cart",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:8001/carts/550e8400-e29b-41d4-a716-446655440011/checkout",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8001",
+              "path": ["carts", "550e8400-e29b-41d4-a716-446655440011", "checkout"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Catalog Service",
+      "item": [
+        {
+          "name": "List Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8002/categories",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8002",
+              "path": ["categories"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Category (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token_admin}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\": \"New Category\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8002/categories",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8002",
+              "path": ["categories"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Slot Service",
+      "item": [
+        {
+          "name": "Get Slots",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8003/slots/550e8400-e29b-41d4-a716-446655440008/550e8400-e29b-41d4-a716-446655440005",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8003",
+              "path": ["slots", "550e8400-e29b-41d4-a716-446655440008", "550e8400-e29b-41d4-a716-446655440005"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Slot (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token_admin}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"partner_id\": \"550e8400-e29b-41d4-a716-446655440008\", \"service_id\": \"550e8400-e29b-41d4-a716-446655440005\", \"slot_time\": \"2025-05-05T12:00:00Z\", \"is_available\": true}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8003/slots",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8003",
+              "path": ["slots"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Order API",
+      "item": [
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"cart_id\": \"550e8400-e29b-41d4-a716-446655440011\", \"total_price\": 45.0}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8004/orders",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8004",
+              "path": ["orders"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "jwt_token",
+      "value": "your_customer_jwt_token_here"
+    },
+    {
+      "key": "jwt_token_admin",
+      "value": "your_admin_jwt_token_here"
+    }
+  ]
+}

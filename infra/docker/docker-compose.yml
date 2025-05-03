@@ -1,0 +1,88 @@
+services:
+  cart_service:
+    build:
+      context: ../../cart_service
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    environment:
+      - DATABASE_URL=postgresql://sheba_user:sheba_password@postgres:5432/sheba
+      - JWT_PUBLIC_KEY=-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkcp9DkMyvX06iEJ2MDYa\nQQH+oPH4FEH+l7TjDEvEVJVbnRTVFTGIoCr1PWGB4KwEEQDRnZbRDxzWOrTd25jN\nEnKRsxXpWgrM9YQuMZBwziAq4yMYgbFPfI25GiFXOsthUvJDE+OpBbGkwWJpBWuz\nrzP4TT5oEbl6MqdvliUE5mv/7af47koSFWKldm3/4aZrAmcdYk496pOWmW4HSHS0\nw8xrwd69KxJM2vswcNA8PqRp1FRRhDYGJkzrFwmwwqI0P0Xb6vHxce0a7WG2UK4P\nFjsrS+HUMErNy0r9POusL9UE1AUCXSEvUACMk5fRN+q/7SJ5tzmxt/R7Bl+Eoghx\nuQIDAQAB\n-----END PUBLIC KEY-----
+    depends_on:
+      - postgres
+      - slot_service
+      - order_api
+    networks:
+      - sheba_network
+
+  catalog_service:
+    build:
+      context: ../../catalog_service
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8000"
+    environment:
+      - DATABASE_URL=postgresql://sheba_user:sheba_password@postgres:5432/sheba
+      - JWT_PUBLIC_KEY=-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkcp9DkMyvX06iEJ2MDYa\nQQH+oPH4FEH+l7TjDEvEVJVbnRTVFTGIoCr1PWGB4KwEEQDRnZbRDxzWOrTd25jN\nEnKRsxXpWgrM9YQuMZBwziAq4yMYgbFPfI25GiFXOsthUvJDE+OpBbGkwWJpBWuz\nrzP4TT5oEbl6MqdvliUE5mv/7af47koSFWKldm3/4aZrAmcdYk496pOWmW4HSHS0\nw8xrwd69KxJM2vswcNA8PqRp1FRRhDYGJkzrFwmwwqI0P0Xb6vHxce0a7WG2UK4P\nFjsrS+HUMErNy0r9POusL9UE1AUCXSEvUACMk5fRN+q/7SJ5tzmxt/R7Bl+Eoghx\nuQIDAQAB\n-----END PUBLIC KEY-----
+    depends_on:
+      - postgres
+    networks:
+      - sheba_network
+
+  slot_service:
+    build:
+      context: ../../slot_service
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8000"
+    environment:
+      - DATABASE_URL=postgresql://sheba_user:sheba_password@postgres:5432/sheba
+      - JWT_PUBLIC_KEY=-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkcp9DkMyvX06iEJ2MDYa\nQQH+oPH4FEH+l7TjDEvEVJVbnRTVFTGIoCr1PWGB4KwEEQDRnZbRDxzWOrTd25jN\nEnKRsxXpWgrM9YQuMZBwziAq4yMYgbFPfI25GiFXOsthUvJDE+OpBbGkwWJpBWuz\nrzP4TT5oEbl6MqdvliUE5mv/7af47koSFWKldm3/4aZrAmcdYk496pOWmW4HSHS0\nw8xrwd69KxJM2vswcNA8PqRp1FRRhDYGJkzrFwmwwqI0P0Xb6vHxce0a7WG2UK4P\nFjsrS+HUMErNy0r9POusL9UE1AUCXSEvUACMk5fRN+q/7SJ5tzmxt/R7Bl+Eoghx\nuQIDAQAB\n-----END PUBLIC KEY-----
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - sheba_network
+
+  order_api:
+    build:
+      context: ../order_api
+      dockerfile: Dockerfile
+    ports:
+      - "8004:8000"
+    networks:
+      - sheba_network
+
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=sheba_user
+      - POSTGRES_PASSWORD=sheba_password
+      - POSTGRES_DB=sheba
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ../scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - ../scripts/seed-data.sql:/docker-entrypoint-initdb.d/seed-data.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - sheba_network
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - sheba_network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  sheba_network:
+    driver: bridge
